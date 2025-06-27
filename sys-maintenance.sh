@@ -1,0 +1,77 @@
+#!/bin/bash
+SECONDS=0
+
+LOGFILE="/var/log/sys-maintenance.log"
+touch "$LOGFILE" || { echo "Cannot write to $LOGFILE"; exit 1; }
+
+if [[ "$EUID" -ne 0 ]]; then
+  echo "This script must be run as root" | tee -a "$LOGFILE"
+  exec sudo "$0" "$@"
+fi
+
+echo "==========================================" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+echo "===== $(date): Starting system maintenance for $(uname -n) =====" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+# update mirrors
+echo "----- Updating mirrors -----" | tee -a "$LOGFILE"
+
+cachyos-rate-mirrors --fasttrack | tee -a "$LOGFILE"
+
+echo "----- Finished updating mirrors -----" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+# update system packages
+echo "----- Updating system -----" | tee -a "$LOGFILE"
+
+pacman -Syu --noconfirm | tee -a "$LOGFILE"
+
+echo "----- Finished updating system -----" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+# clear orphaned packages
+echo "----- Clearing orphaned packages -----" | tee -a "$LOGFILE"
+
+PACKAGES=$(pacman -Qtdq)
+if [ -n "$PACKAGES" ]; then
+  pacman -Rns "$PACKAGES" --noconfirm | tee -a "$LOGFILE"
+else 
+  echo "No orphaned packages to clear" | tee -a "$LOGFILE"
+fi
+
+echo "----- Finished clearing orphaned packages -----" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+# clear package cache
+echo "----- Clearing package cache -----" | tee -a "$LOGFILE"
+
+paccache -r -k3 | tee -a "$LOGFILE"
+
+echo "----- Finished clearing package cache -----" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+# clear journal
+echo "----- Vacuuming journal logs older than 1 week -----" | tee -a "$LOGFILE"
+
+
+journalctl --vacuum-time=7days | tee -a "$LOGFILE"
+
+echo "----- Finished vacuuming journal logs -----" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+# clear log files
+echo "----- Clearing log files older than 1 week -----" | tee -a "$LOGFILE"
+
+fd /var/log '*.log.*' --type f --changed-before 7d -i -H | tee -a "$LOGFILE"
+fd /var/log '*.log.*' --type f --changed-before 7d -x rm -f {} -i -H
+
+echo "----- Finished clearing log files -----" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"
+
+echo "===== Finished system maintenance for $(uname -n) in $SECONDS seconds =====" | tee -a "$LOGFILE"
+
+echo " " | tee -a "$LOGFILE"
+echo "==========================================" | tee -a "$LOGFILE"
+echo " " | tee -a "$LOGFILE"

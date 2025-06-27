@@ -33,6 +33,7 @@ require("dashboard").setup({
       { icon = " ", desc = 'find word',     action  = 'Telescope live_grep',                                                         key = 'g' },
       { icon = " ", desc = 'edit config',   action  = 'lua vim.fn.chdir(vim.fn.expand("~/.config/nvim")) vim.cmd("edit init.lua")',  key = 'c' },
       { icon = "󰈆 ", desc = 'exit',          action  = 'qa',                                                                          key = 'q' },
+      { icon = "󰙅 ", desc = 'file tree',     action  = 'NvimTreeToggle',                                                              key = 't' },
     },
     footer = {
       "                                        ",

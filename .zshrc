@@ -16,7 +16,7 @@ autoload -U colors && colors
 export CC=clang
 export CXX=clang++
 export TERMINAL=kitty
-export WALLPAPER=~/Pictures/Wallpapers/wave-ctppccn-mocha-mauve.png 
+export WALLPAPER=~/Pictures/Wallpapers/abstract-swirls.jpg
 export EDITOR=nvim
 export GBM_BACKEND=nvidia-drm
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
@@ -114,7 +114,6 @@ eval "$(zoxide init zsh)"
 # zsh plugins
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # keybinds
 bindkey '^E' launch_nvim
