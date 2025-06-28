@@ -50,7 +50,7 @@ vim.lsp.inlay_hint.enable(true)
 
 package.path = package.path .. vim.fn.getcwd() .. "/?.lua;" .. vim.fn.getcwd() .. "/lua/?.lua;" .. vim.fn.getcwd() .. "/plugin/?.lua;"
 
-vim.cmd[[ colorscheme catppuccin ]]
+vim.cmd[[ colorscheme catppuccin-frappe ]]
 
 vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#969696", italic = true })
 

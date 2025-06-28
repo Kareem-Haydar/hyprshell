@@ -27,6 +27,15 @@ local function update_telescope_highlights()
             preview_text = "#1f1f28",
             bg = "#2a2a32"
         },
+        ["catppuccin-frappe"] = {
+            prompt_highlight = "#ff9e64",
+            results_highlight = "#56b6c2",
+            preview_highlight = "#c678dd",
+            prompt_text = "#1e1e2e",
+            results_text = "#1e1e2e",
+            preview_text = "#1e1e2e",
+            bg = "#292938"
+        },
         ["catppuccin-mocha"] = {
             prompt_highlight = "#ff9e64",
             results_highlight = "#56b6c2",
@@ -170,3 +179,10 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 vim.opt.fillchars = { eob = ' ' }
+
+vim.cmd("highlight LineNr guifg=#c0c0c0")
+vim.cmd("highlight CursorLineNr guifg=#ffff00 gui=bold")
+vim.cmd("highlight TreesitterContextLineNumber guifg=#909090 gui=bold")
+
+vim.cmd("highlight WinSeparator guifg=#ffffff")
+vim.cmd("highlight NvimTreeWinSeparator guifg=#ffffff")
