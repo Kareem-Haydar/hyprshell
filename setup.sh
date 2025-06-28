@@ -2,7 +2,19 @@
 
 user="$USER"
 
-sudo pacman -S neovim kitty hyprland tmux unzip npm nodejs zoxide swww python-pywal zsh fzf ripgrep fd bat clang --noconfirm
+if command -v pacman >/dev/null 2>&1 && pacman -Qq >/dev/null 2>&1; then
+  sudo pacman -S neovim kitty hyprland tmux unzip npm nodejs zoxide swww python-pywal zsh fzf ripgrep fd bat clang --noconfirm
+else 
+  echo "You are not on an arch based distro. Only continue after installing the following packages: neovim, kitty, hyprland, tmux, unzip, npm, nodejs, zoxide, swww, python-pywal, zsh, fzf, ripgrep, fd, bat, clang before running"
+
+  echo -p "Contiune? (y/n) "
+  read continue
+  if [[ $continue != "y" ]]; then
+    exit 1
+  fi
+
+  echo " "
+fi
 
 function remove_symlink_if_exists() {
   if [[ -L "$1" ]]; then
