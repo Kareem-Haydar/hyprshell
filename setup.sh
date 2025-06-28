@@ -7,17 +7,31 @@ fi
 
 pacman -S neovim kitty hyprland tmux unzip npm nodejs zoxide swww python-pywal zsh fzf ripgrep fd bat clang --noconfirm
 
-function symlink_config() {
-  ln -sf ~/dotfiles/.zshrc ~/.zshrc > /dev/null 2>&1
-  ln -sf ~/dotfiles/nvim ~/.config/nvim > /dev/null 2>&1
-  ln -sf ~/dotfiles/hypr ~/.config/hypr > /dev/null 2>&1
-  ln -sf ~/dotfiles/kitty ~/.config/kitty > /dev/null 2>&1
-  ln -sf ~/dotfiles/tmux ~/.config/tmux > /dev/null 2>&1
-  ln -sf ~/dotfiles/sys-maintenance.sh /usr/bin > /dev/null 2>&1
+function remove_symlink_if_exists() {
+  if [[ -L "$1" ]]; then
+    echo "Removing symlink: $1"
+    rm "$1"
+  fi
 }
 
-symlink_config
+function update_dotfiles() {
+  remove_symlink_if_exists ~/.zshrc
+  ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
-#inotifywait -m -r -e modify,create,delete --format '%w%f' ~/dotfiles 2>/dev/null | while read change; do
-#  symlink_config
-#done
+  remove_symlink_if_exists ~/.config/nvim
+  ln -sf ~/dotfiles/nvim ~/.config/nvim
+
+  remove_symlink_if_exists ~/.config/hypr
+  ln -sf ~/dotfiles/hypr ~/.config/hypr
+
+  remove_symlink_if_exists ~/.config/kitty
+  ln -sf ~/dotfiles/kitty ~/.config/kitty
+
+  remove_symlink_if_exists ~/.config/tmux
+  ln -sf ~/dotfiles/tmux ~/.config/tmux
+
+  remove_symlink_if_exists /usr/bin/sys-maintenance
+  ln -sf ~/dotfiles/sys-maintenance /usr/bin/sys-maintenance
+}
+
+update_dotfiles
