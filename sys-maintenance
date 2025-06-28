@@ -4,9 +4,12 @@ SECONDS=0
 LOGFILE="/var/log/sys-maintenance.log"
 touch "$LOGFILE" || { echo "Cannot write to $LOGFILE"; exit 1; }
 
+command -v fd >/dev/null || { echo "fd not found"; exit 1; }
+command -v paccache >/dev/null || { echo "paccache not found"; exit 1; }
+
 if [[ "$EUID" -ne 0 ]]; then
   echo "This script must be run as root" | tee -a "$LOGFILE"
-  exec sudo "$0" "$@"
+  exit 1
 fi
 
 echo "==========================================" | tee -a "$LOGFILE"
@@ -36,7 +39,8 @@ echo "----- Clearing orphaned packages -----" | tee -a "$LOGFILE"
 
 PACKAGES=$(pacman -Qtdq)
 if [ -n "$PACKAGES" ]; then
-  pacman -Rns "$PACKAGES" --noconfirm | tee -a "$LOGFILE"
+  readarray -t pkgs <<< "$PACKAGES"
+  pacman -Rns "${pkgs[@]}" --noconfirm 2>&1 | tee -a "$LOGFILE"
 else 
   echo "No orphaned packages to clear" | tee -a "$LOGFILE"
 fi
@@ -64,8 +68,8 @@ echo " " | tee -a "$LOGFILE"
 # clear log files
 echo "----- Clearing log files older than 1 week -----" | tee -a "$LOGFILE"
 
-fd /var/log '*.log.*' --type f --changed-before 7d -i -H | tee -a "$LOGFILE"
-fd /var/log '*.log.*' --type f --changed-before 7d -x rm -f {} -i -H
+fd /var/log '.log.' --type f --changed-before 7d -i -H | tee -a "$LOGFILE"
+fd /var/log '.log.' --type f --changed-before 7d -x rm -f {} -i -H
 
 echo "----- Finished clearing log files -----" | tee -a "$LOGFILE"
 echo " " | tee -a "$LOGFILE"
