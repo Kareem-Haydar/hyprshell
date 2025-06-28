@@ -1,11 +1,8 @@
 #!/bin/bash
 
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root"
-  exit 1
-fi
+user="$USER"
 
-pacman -S neovim kitty hyprland tmux unzip npm nodejs zoxide swww python-pywal zsh fzf ripgrep fd bat clang --noconfirm
+sudo pacman -S neovim kitty hyprland tmux unzip npm nodejs zoxide swww python-pywal zsh fzf ripgrep fd bat clang --noconfirm
 
 function remove_symlink_if_exists() {
   if [[ -L "$1" ]]; then
@@ -15,23 +12,39 @@ function remove_symlink_if_exists() {
 }
 
 function update_dotfiles() {
-  remove_symlink_if_exists ~/.zshrc
-  ln -sf ~/dotfiles/.zshrc ~/.zshrc
+  remove_symlink_if_exists "${HOME}/.zshrc"
 
-  remove_symlink_if_exists ~/.config/nvim
-  ln -sf ~/dotfiles/nvim ~/.config/nvim
+  echo "Creating symlink: ${HOME}/.zshrc"
+  ln -sf "${HOME}/dotfiles/.zshrc" "${HOME}/.zshrc"
 
-  remove_symlink_if_exists ~/.config/hypr
-  ln -sf ~/dotfiles/hypr ~/.config/hypr
+  remove_symlink_if_exists "${HOME}/.config/nvim"
 
-  remove_symlink_if_exists ~/.config/kitty
-  ln -sf ~/dotfiles/kitty ~/.config/kitty
+  echo "Creating symlink: ${HOME}/.config/nvim"
+  ln -sf "${HOME}/dotfiles/nvim" "${HOME}/.config/nvim"
 
-  remove_symlink_if_exists ~/.config/tmux
-  ln -sf ~/dotfiles/tmux ~/.config/tmux
+  remove_symlink_if_exists "${HOME}/.config/hypr"
 
-  remove_symlink_if_exists /usr/bin/sys-maintenance
-  ln -sf ~/dotfiles/sys-maintenance /usr/bin/sys-maintenance
+  echo "Creating symlink: ${HOME}/.config/hypr"
+  ln -sf "${HOME}/dotfiles/hypr" "${HOME}/.config/hypr"
+
+  remove_symlink_if_exists "${HOME}/.config/kitty"
+
+  echo "Creating symlink: ${HOME}/.config/kitty"
+  ln -sf "${HOME}/dotfiles/kitty" "${HOME}/.config/kitty"
+
+  remove_symlink_if_exists "${HOME}/.config/tmux"
+
+  echo "Creating symlink: ${HOME}/.config/tmux"
+  ln -sf "${HOME}/dotfiles/tmux" "${HOME}/.config/tmux"
+
+  # Manually check and remove system-wide symlink
+  if [[ -L /usr/bin/sys-maintenance ]]; then
+    echo "Removing symlink: /usr/bin/sys-maintenance"
+    sudo rm /usr/bin/sys-maintenance
+  fi
+
+  echo "Creating system-wide symlink: /usr/bin/sys-maintenance"
+  sudo ln -sf "${HOME}/dotfiles/sys-maintenance" /usr/bin/sys-maintenance
 }
 
 update_dotfiles
