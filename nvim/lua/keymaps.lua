@@ -14,12 +14,12 @@ vim.keymap.set("n", "<leader>gc", ":Neogen<CR>", { silent = true })
 vim.keymap.set("n", "<leader>q", ":qa<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader>ls", function() require("persistence").load() end)
-
 vim.keymap.set("n", "<leader>lS", function() require("persistence").select() end)
-
 vim.keymap.set("n", "<leader>ql", function() require("persistence").load({ last = true }) end)
-
 vim.keymap.set("n", "<leader>ss", function() require("persistence").stop() end)
+
+vim.keymap.set("n", "<leader>vs", ":vs<CR>", { silent = true })
+vim.keymap.set("n", "<leader>hs", ":sp<CR>", { silent = true })
 
 -- mouse users + nvimtree users!
 --vim.keymap.set({ "n", "v" }, "<RightMouse>", function()

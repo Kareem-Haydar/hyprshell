@@ -2798,6 +2798,6 @@ include ~/.cache/wal/colors-kitty.conf
 
 
 # BEGIN_KITTY_THEME
-# Catppuccin-Frappe
+# Catppuccin-Mocha
 include current-theme.conf
 # END_KITTY_THEME
