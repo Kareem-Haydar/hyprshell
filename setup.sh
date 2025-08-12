@@ -197,6 +197,13 @@ if [[ $choice == "1" || $choice == "" ]]; then
   sudo cp sys-maintenance /usr/bin
 fi
 
+echo ""
+
+echo "Cleaning up..."
+
+cd $HOME
+rm -rf hyprshell
+
 echo "Installation Complete!"
 echo "Please restart your system!"
 echo ""
