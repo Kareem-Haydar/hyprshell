@@ -1,0 +1,2 @@
+systemctl suspend
+echo "Sleeping"

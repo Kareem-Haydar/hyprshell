@@ -1,0 +1,1 @@
+export WALLPAPER=/home/kareemh/Pictures/Wallpapers/windows-xp.jpg
