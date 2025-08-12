@@ -1,65 +1,211 @@
 #!/bin/bash
 
-user="$USER"
-arch=1
+clear
 
-if command -v pacman >/dev/null 2>&1 && pacman -Qq >/dev/null 2>&1; then
-  arch=0
-  sudo pacman -S neovim kitty hyprland tmux unzip npm nodejs zoxide swww python-pywal zsh fzf ripgrep fd bat clang --noconfirm
-else 
-  echo "You are not on an arch based distro. Only continue after installing the following packages: neovim, kitty, hyprland, tmux, unzip, npm, nodejs, zoxide, swww, python-pywal, zsh, fzf, ripgrep, fd, bat, clang before running"
+echo "
+ /$$   /$$ /$$     /$$ /$$$$$$$  /$$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$$ /$$       /$$      
+| $$  | $$|  $$   /$$/| $$__  $$| $$__  $$ /$$__  $$| $$  | $$| $$_____/| $$      | $$      
+| $$  | $$ \  $$ /$$/ | $$  \ $$| $$  \ $$| $$  \__/| $$  | $$| $$      | $$      | $$      
+| $$$$$$$$  \  $$$$/  | $$$$$$$/| $$$$$$$/|  $$$$$$ | $$$$$$$$| $$$$$   | $$      | $$      
+| $$__  $$   \  $$/   | $$____/ | $$__  $$ \____  $$| $$__  $$| $$__/   | $$      | $$      
+| $$  | $$    | $$    | $$      | $$  \ $$ /$$  \ $$| $$  | $$| $$      | $$      | $$      
+| $$  | $$    | $$    | $$      | $$  | $$|  $$$$$$/| $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$
+|__/  |__/    |__/    |__/      |__/  |__/ \______/ |__/  |__/|________/|________/|________/
+                                                                                            
+"
+cd $HOME
 
-  read -p "Contiune? (y/n) " continue
-  if [[ $continue != "y" ]]; then
-    exit 1
-  fi
+echo "Welcome to HyprShell, * denotes default selection"
 
-  echo " "
+echo "-----Dotfiles Setup-----"
+
+echo "[1]* Automatically backup your current config"
+echo "[2]  Skip automatic backup"
+echo "[q]  Quit"
+
+read -p "Select: " choice
+echo ""
+
+if [[ $choice == "q" ]]; then
+  exit 0
 fi
 
-function remove_symlink_if_exists() {
-  if [[ -L "$1" ]]; then
-    echo "Removing symlink: $1"
-    rm "$1"
-  fi
-}
+if [[ $choice == "1" || $choice == "" ]]; then 
+  echo "Backing up current config..."
+  cp -r $HOME/.config $HOME/Documents/config-backup-$(date +%Y-%m-%d-%H-%M-%S)
+fi
 
-function update_dotfiles() {
-  remove_symlink_if_exists "${HOME}/.zshrc"
+echo "Removing old config..."
+rm -rf ~/.config/hypr
+rm -rf ~/.config/kitty
+rm -rf ~/.config/tmux
+rm -rf ~/.config/nvim
+rm -f  ~/.zshrc
+rm -rf ~/.zsh
 
-  echo "Creating symlink: ${HOME}/.zshrc"
-  ln -sf "${HOME}/dotfiles/.zshrc" "${HOME}/.zshrc"
+echo "Cloning new dotfiles..."
+if [[ -d hyprshell ]]; then
+  rm -rf hyprshell
+fi
 
-  remove_symlink_if_exists "${HOME}/.config/nvim"
+git clone https://github.com/Kareem-Haydar/hyprshell.git
+cd hyprshell
 
-  echo "Creating symlink: ${HOME}/.config/nvim"
-  ln -sf "${HOME}/dotfiles/nvim" "${HOME}/.config/nvim"
+echo ""
 
-  remove_symlink_if_exists "${HOME}/.config/hypr"
+echo "-----Font Setup-----"
+echo ""
+echo "[1]* Install"
+echo "[2]  Skip"
+echo "[q]  Quit"
 
-  echo "Creating symlink: ${HOME}/.config/hypr"
-  ln -sf "${HOME}/dotfiles/hypr" "${HOME}/.config/hypr"
+read -p "Select: " choice
+echo ""
 
-  remove_symlink_if_exists "${HOME}/.config/kitty"
+if [[ $choice == "q" ]]; then
+  exit 0
+fi
 
-  echo "Creating symlink: ${HOME}/.config/kitty"
-  ln -sf "${HOME}/dotfiles/kitty" "${HOME}/.config/kitty"
+if [[ $choice == "1" || $choice == "" ]]; then
+  echo "Installing fonts..."
 
-  remove_symlink_if_exists "${HOME}/.config/tmux"
+  sudo pacman -S nerd-fonts --noconfirm
+fi
 
-  echo "Creating symlink: ${HOME}/.config/tmux"
-  ln -sf "${HOME}/dotfiles/tmux" "${HOME}/.config/tmux"
+echo "-----DE Setup-----"
+echo ""
+echo "[1]* Install"
+echo "[2]  Skip"
+echo "[q]  Quit"
 
-  if [[ "$arch" -eq 0 ]]; then
-    # Manually check and remove system-wide symlink
-    if [[ -L /usr/bin/sys-maintenance ]]; then
-      echo "Removing symlink: /usr/bin/sys-maintenance"
-      sudo rm /usr/bin/sys-maintenance
-    fi
+read -p "Select: " choice
+echo ""
 
-    echo "Creating system-wide symlink: /usr/bin/sys-maintenance"
-    sudo ln -sf "${HOME}/dotfiles/sys-maintenance" /usr/bin/sys-maintenance
-  fi
-}
+if [[ $choice == "q" ]]; then
+  exit 0
+fi
 
-update_dotfiles
+if [[ $choice == "1" || $choice == "" ]]; then
+  echo "Installing hyprland..."
+
+  sudo pacman -S hyprland --noconfirm
+  cp -r hypr ~/.config/
+
+  echo "Installing quickshell..."
+
+  pacman -S quickshell --noconfirm
+  cp -r quickshell ~/.config/
+fi
+
+echo ""
+
+echo "-----Terminal Setup-----"
+echo ""
+echo "[1]* Install"
+echo "[2]  Skip"
+echo "[q]  Quit"
+
+read -p "Select: " choice
+echo ""
+
+if [[ $choice == "q" ]]; then
+  exit 0
+fi
+
+if [[ $choice == "1" || $choice == "" ]]; then
+  echo "Installing kitty..."
+
+  sudo pacman -S kitty --noconfirm
+  cp -r kitty ~/.config/
+
+  echo "Installing tmux..."
+
+  sudo pacman -S tmux --noconfirm
+  cp -r tmux ~/.config/
+fi
+
+echo ""
+
+echo "-----Shell Setup-----"
+echo ""
+echo "[1]* Install"
+echo "[2]  Skip"
+echo "[q]  Quit"
+
+read -p "Select: " choice
+echo ""
+
+if [[ $choice == "q" ]]; then
+  exit 0
+fi
+
+if [[ $choice == "1" || $choice == "" ]]; then
+  echo "Installing zsh..."
+
+  sudo pacman -S zsh --noconfirm
+  cp -r .zshrc ~/
+
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git 
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+
+  mkdir -p ~/.zsh
+
+  cp -r zsh-autosuggestions/zsh-autosuggestions.zsh ~/.zsh/
+  cp -r zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ~/.zsh/
+fi
+
+echo ""
+
+echo "-----Neovim Setup-----"
+echo ""
+echo "[1]* Install"
+echo "[2]  Skip"
+echo "[q]  Quit"
+
+read -p "Select: " choice
+echo ""
+
+if [[ $choice == "q" ]]; then
+  exit 0
+fi
+
+if [[ $choice == "1" || $choice == "" ]]; then
+  echo "Installing neovim..."
+
+  sudo pacman -S neovim --noconfirm
+  cp -r nvim ~/.config/
+fi
+
+echo ""
+
+echo "Would you like to install the system maintainance script?"
+echo ""
+echo "[1]* Install"
+echo "[2]  Skip"
+echo "[q]  Quit"
+
+read -p "Select: " choice
+echo ""
+
+if [[ $choice == "q" ]]; then
+  exit 0
+fi
+
+if [[ $choice == "1" || $choice == "" ]]; then
+  echo "Installing system maintenance script..."
+
+  sudo cp sys-maintenance /usr/bin
+fi
+
+echo "Installation Complete!"
+echo "Please restart your system!"
+echo ""
+echo "[1]* Reboot"
+echo "[2]  Quit"
+
+read -p "Select: " choice
+echo ""
+
+if [[ $choice == "1" ]]; then
+  reboot
+fi
