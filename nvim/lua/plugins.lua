@@ -1,5 +1,9 @@
 local M = {
   {
+    'AlphaTechnolog/pywal.nvim',
+    opts = {}
+  },
+  {
     'Mofiqul/vscode.nvim'
   },
   {

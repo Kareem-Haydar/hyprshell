@@ -1,6 +1,6 @@
 require("lazy_setup")
 require("autocmds")
 require("keymaps")
-require("highlights")
+--require("highlights")
 require("neovide")
 require("color_finder")

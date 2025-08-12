@@ -145,13 +145,14 @@ if [[ $choice == "1" || $choice == "" ]]; then
   sudo pacman -S zsh --noconfirm
   cp -r .zshrc ~/
 
+
+  mkdir -p ~/.zsh
+  cd .zsh
+
   git clone https://github.com/zsh-users/zsh-autosuggestions.git 
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 
-  mkdir -p ~/.zsh
-
-  cp -r zsh-autosuggestions/zsh-autosuggestions.zsh ~/.zsh/
-  cp -r zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ~/.zsh/
+  cd $HOME
 fi
 
 echo ""
