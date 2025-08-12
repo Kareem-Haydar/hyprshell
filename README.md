@@ -1,3 +1,5 @@
+# THIS IS NOWHERE NEAR COMPLETE, IF YOU TRY TO USE IT, IT WILL BREAK
+
 # My dotfiles repository
 
 ## Contains configs for the following:
