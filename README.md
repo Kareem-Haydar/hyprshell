@@ -10,6 +10,7 @@
 - system maintenance script (standalone `sys-maintenance` script)
 
 ## Installation
+Before you install, make sure you have `paru` and `wget` installed at least
 To install simply paste the following code into your terminal:
 
 ```bash

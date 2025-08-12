@@ -93,7 +93,7 @@ if [[ $choice == "1" || $choice == "" ]]; then
 
   echo "Installing quickshell..."
 
-  pacman -S quickshell --noconfirm
+  paru -S quickshell --noconfirm
   cp -r quickshell ~/.config/
 fi
 
