@@ -51,6 +51,10 @@ vim.lsp.inlay_hint.enable(true)
 package.path = package.path .. vim.fn.getcwd() .. "/?.lua;" .. vim.fn.getcwd() .. "/lua/?.lua;" .. vim.fn.getcwd() .. "/plugin/?.lua;"
 
 vim.cmd[[ colorscheme pywal ]]
+vim.cmd [[
+  highlight Normal guibg=NONE ctermbg=NONE
+  highlight NormalFloat guibg=NONE ctermbg=NONE
+]]
 
 vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#969696", italic = true })
 
