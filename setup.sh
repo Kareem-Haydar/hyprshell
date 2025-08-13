@@ -214,6 +214,6 @@ echo "[2]  Quit"
 read -p "Select: " choice
 echo ""
 
-if [[ $choice == "1" ]]; then
+if [[ $choice == "1" || $choice == "" ]]; then
   sudo systemctl reboot
 fi

@@ -21,6 +21,7 @@ export EDITOR=nvim
 export GBM_BACKEND=nvidia-drm
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export WLR_NO_HARDWARE_CURSORS=1
+export QML_XHR_ALLOW_FILE_READ=1
 
 # prompt customization
 function set_prompt() {
