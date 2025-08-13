@@ -111,7 +111,7 @@ class WallpaperModel(QObject):
         # Execute wallpaper script
         self.process = QProcess()
         self.process.finished.connect(lambda: self._on_wallpaper_process_finished(path))
-        self.process.start("bash", ["-c", f"exec ~/.local/share/wallpapers/wallpaper.sh {path}"])
+        self.process.start("bash", ["-c", f"exec ~/.config/quickshell/widgets/wallpaper/wallpaper.sh {path}"])
 
     def _on_wallpaper_process_finished(self, path):
         # Update the selected path only after processing is complete
