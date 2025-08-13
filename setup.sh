@@ -174,7 +174,7 @@ if [[ $choice == "1" || $choice == "" ]]; then
   echo "Installing neovim..."
 
   sudo pacman -S neovim --noconfirm
-  cp -r nvim ~/.config/
+  cp -r ~/hyprshell/nvim ~/.config/
 fi
 
 echo ""
@@ -215,5 +215,5 @@ read -p "Select: " choice
 echo ""
 
 if [[ $choice == "1" ]]; then
-  sudo reboot
+  sudo systemctl reboot
 fi
