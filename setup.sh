@@ -215,5 +215,5 @@ read -p "Select: " choice
 echo ""
 
 if [[ $choice == "1" ]]; then
-  reboot
+  sudo reboot
 fi
